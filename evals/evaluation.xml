@@ -1,0 +1,94 @@
+<evaluation>
+  <!--
+    Read-only, deterministic evals. They target the registry and the
+    decision helper, whose outputs are pure functions of the inputs and
+    therefore stable over time (unlike live-data tools). Each setup dict is
+    given in full so the answer is reproducible.
+  -->
+
+  <qa_pair>
+    <question>Using the quant_research_mcp tools, how many trading methods are currently registered in the method registry?</question>
+    <answer>1</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>What is the paper_url of the method with key 'hurst_regime_orb'?</question>
+    <answer>https://arxiv.org/pdf/2205.11122</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Score this setup with the decision helper (default equity 100000, default risk_pct, no news): {"signal":"LONG","playbook":"TREND_ORB","regime":"TRENDING","hurst":0.60,"price":100.0,"atr_daily":4.0,"rel_volume":2.4,"rsi":60.0,"entry":100.0,"stop":98.0,"target":104.0}. What is the verdict?</question>
+    <answer>ENTRY</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>For that same setup (LONG, entry 100, stop 98, target 104, hurst 0.60, rel_volume 2.4, rsi 60, atr_daily 4.0), what is the composite score returned by quant_score_decision with no news signal?</question>
+    <answer>1.0</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>For that same setup with equity 100000 and risk_pct 0.005, how many shares does the decision helper's fixed-fractional position sizing recommend?</question>
+    <answer>250</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Take the LONG setup (entry 100, stop 98, target 104, hurst 0.60, rel_volume 2.4, rsi 60, atr_daily 4.0) and pass news_sentiment="bearish" with news_confidence=0.9 to quant_score_decision. What is the verdict?</question>
+    <answer>NO_ENTRY</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Score this SHORT setup with no news: {"signal":"SHORT","playbook":"TREND_ORB","regime":"TRENDING","hurst":0.53,"price":50.0,"atr_daily":2.0,"rel_volume":1.2,"rsi":55.0,"entry":50.0,"stop":51.6,"target":46.8}. What is the composite score?</question>
+    <answer>0.6183</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>For that SHORT setup (hurst 0.53), what is the value of the 'regime_strength' sub-factor in the decision helper's factor breakdown?</question>
+    <answer>0.3</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Score a setup where the stop is noise-tight: {"signal":"LONG","playbook":"TREND_ORB","regime":"TRENDING","hurst":0.60,"price":100.0,"atr_daily":4.0,"rel_volume":2.4,"rsi":60.0,"entry":100.0,"stop":99.5,"target":101.0}. Does the position sizing apply a haircut (true or false)?</question>
+    <answer>true</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>If a setup has signal "NO_ENTRY" and entry null, what verdict does quant_score_decision return?</question>
+    <answer>NO_ENTRY</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Take the LONG setup (entry 100, stop 98, target 104, hurst 0.60, rel_volume 2.4, rsi 60, atr_daily 4.0) and pass news_sentiment="bullish" with news_confidence=1.0. What news multiplier does the decision helper apply?</question>
+    <answer>1.15</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Score this mean-reversion fade with no news: {"signal":"SHORT","playbook":"REVERT_VWAP_FADE","regime":"MEAN_REVERTING","hurst":0.369,"price":210,"atr_daily":8.03,"rel_volume":0.59,"rsi":74,"entry":210,"stop":211,"target":205}. A fade short shorts an overbought extension, so RSI 74 is the desired condition. What is the 'momentum_position' sub-factor value?</question>
+    <answer>0.9667</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Take the perfect LONG setup (entry 100, stop 98, target 104, hurst 0.60, rel_volume 2.4, rsi 60, atr_daily 4.0) with "timeframe":"swing" and pass days_to_earnings=1 to quant_score_decision. What verdict is returned?</question>
+    <answer>NO_ENTRY</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Same perfect LONG setup with "timeframe":"intraday" and days_to_earnings=1: earnings inside the window only warns intraday setups. What verdict is returned?</question>
+    <answer>ENTRY</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Pass the perfect LONG setup with portfolio_heat_pct=2.5 (above the 2% portfolio heat limit). What verdict does quant_score_decision return?</question>
+    <answer>NO_ENTRY</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Using quant_portfolio_risk with equity 100000 and positions [{AAA LONG entry 100 stop 95 shares 100}, {BBB LONG entry 50 stop 48 shares 200}], what is portfolio_heat_pct?</question>
+    <answer>0.9</answer>
+  </qa_pair>
+
+  <qa_pair>
+    <question>Add "htf_alignment": {"price": 100, "ema20": 98, "ema50": 96} to the perfect LONG setup and score it. What value does the htf_alignment factor get (price and both EMAs fully aligned for a long)?</question>
+    <answer>1.0</answer>
+  </qa_pair>
+
+</evaluation>

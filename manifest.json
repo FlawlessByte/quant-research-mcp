@@ -1,0 +1,47 @@
+{
+  "manifest_version": "0.2",
+  "name": "quant-research-mcp",
+  "display_name": "Quant Research MCP",
+  "version": "0.1.0",
+  "description": "Paper-backed quant trading methods + a deterministic, no-LLM decision helper. Read-only research tooling — not financial advice.",
+  "long_description": "An MCP server exposing a registry of paper-backed quantitative trading methods (Hurst-regime ORB, RSI-2 reversion, Donchian trend, cross-sectional momentum, pairs cointegration) plus a deterministic decision helper, backtesting, event-risk checks, portfolio heat, and market context. The server supplies reproducible math; the calling agent supplies judgement. No LLM, no subprocess, no orders.",
+  "author": {
+    "name": "FlawlessByte",
+    "url": "https://github.com/FlawlessByte"
+  },
+  "homepage": "https://github.com/FlawlessByte/quant-research-mcp",
+  "documentation": "https://github.com/FlawlessByte/quant-research-mcp#readme",
+  "support": "https://github.com/FlawlessByte/quant-research-mcp/issues",
+  "license": "MIT",
+  "keywords": ["trading", "quant", "finance", "backtesting", "mcp"],
+  "server": {
+    "type": "binary",
+    "entry_point": "uvx",
+    "mcp_config": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/FlawlessByte/quant-research-mcp",
+        "quant-research-mcp"
+      ],
+      "env": {
+        "QUANT_DATA_PROVIDER": "${user_config.data_provider}"
+      }
+    }
+  },
+  "user_config": {
+    "data_provider": {
+      "type": "string",
+      "title": "Data provider",
+      "description": "Market-data backend. Default 'yfinance' (free, ~15-min delayed).",
+      "default": "yfinance",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "linux", "win32"],
+    "runtimes": {
+      "python": ">=3.12"
+    }
+  }
+}

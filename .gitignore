@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+wheels/
+
+# Virtualenv / uv
+.venv/
+venv/
+env/
+
+# Test / lint caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Packaging artifacts
+*.mcpb
+
+# Per-machine MCP registration (contains an absolute path). Use
+# `make claude-add` / `make register`, or copy .mcp.json.example.
+.mcp.json
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/

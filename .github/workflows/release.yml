@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Build sdist + wheel
+        run: uv build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  pypi-publish:
+    needs: build
+    runs-on: ubuntu-latest
+    # PyPI Trusted Publishing (OIDC) — no token stored. Configure the trusted
+    # publisher for this repo + workflow + environment on PyPI first.
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  bundle-and-release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Pack Claude Desktop bundle (.mcpb)
+        run: npx -y @anthropic-ai/mcpb pack . quant-research-mcp.mcpb
+      - name: Create GitHub Release with artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*
+            quant-research-mcp.mcpb
+          generate_release_notes: true

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.FlawlessByte/quant-research-mcp",
+  "description": "Registry of paper-backed quantitative trading methods plus a deterministic, no-LLM decision helper. Read-only research tooling — not financial advice.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/FlawlessByte/quant-research-mcp",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "quant-research-mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

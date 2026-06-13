@@ -1,0 +1,13 @@
+{
+  "//": "Copy to .mcp.json (gitignored). Path-free: runs straight from GitHub via uvx. After a PyPI release you can drop the --from git+... and use the published package, or `make register` for the local checkout form.",
+  "mcpServers": {
+    "quant_research": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/FlawlessByte/quant-research-mcp",
+        "quant-research-mcp"
+      ]
+    }
+  }
+}
